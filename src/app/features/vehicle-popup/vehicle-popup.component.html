@@ -1,0 +1,20 @@
+<div class="popup-content-wrapper">
+  <h3 class="popup-title">
+    #{{ vehicle().name }}
+    <span class="popup-badge" [class]="badgeClass()">{{ status() }}</span>
+  </h3>
+  <div class="popup-body">
+    <div class="popup-row">
+      <span class="popup-icon">{{ vehicle().type === vehicleType.Scooter ? dictionary.vehicleType.scooterEmoji : dictionary.vehicleType.bikeEmoji }}</span>
+      <span>{{ dictionary.labels.type }}: <strong>{{ typeLabel() }}</strong></span>
+    </div>
+    <div class="popup-row">
+      <span class="popup-icon">📍</span>
+      <span>{{ dictionary.labels.lat }}: <strong>{{ vehicle().location.latitude | number:'1.5-5' }}</strong></span>
+    </div>
+    <div class="popup-row">
+      <span class="popup-icon">📍</span>
+      <span>{{ dictionary.labels.lng }}: <strong>{{ vehicle().location.longitude | number:'1.5-5' }}</strong></span>
+    </div>
+  </div>
+</div>

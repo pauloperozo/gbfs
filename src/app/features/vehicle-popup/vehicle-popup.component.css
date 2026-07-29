@@ -1,0 +1,87 @@
+:host {
+  display: block;
+}
+
+.popup-content-wrapper {
+	color: var(--text-main);
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.popup-title {
+	font-size: 0.92rem;
+	font-weight: 700;
+	color: var(--primary-color);
+	border-bottom: 1px solid var(--border-color);
+	padding-bottom: 8px;
+	margin-right: 18px;
+}
+
+.popup-body {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.popup-row {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	font-size: 0.78rem;
+	color: var(--text-muted);
+}
+
+.popup-row span strong {
+	color: var(--text-main);
+}
+
+.popup-row .classic-off {
+	color: var(--text-muted);
+	background-color: var(--surface-strong);
+	padding: 1px 4px;
+	border-radius: 4px;
+}
+
+.popup-icon {
+	font-size: 0.95rem;
+	width: 16px;
+	text-align: center;
+	display: inline-block;
+}
+
+.font-success {
+	color: var(--status-connected);
+}
+
+.font-error {
+	color: var(--status-error);
+}
+
+.popup-status-available {
+	color: var(--status-connected);
+	font-weight: 600;
+}
+
+.popup-status-disabled {
+	color: var(--status-error);
+}
+
+.popup-status-reserved {
+	color: var(--status-reserved);
+}
+
+.popup-badge {
+	font-size: 0.6rem;
+	padding: 2px 6px;
+	border-radius: 8px;
+	margin-left: 6px;
+	vertical-align: middle;
+	font-weight: 600;
+	color: #fff;
+	text-transform: uppercase;
+}
+
+.popup-badge.badge-available { background-color: var(--status-connected); }
+.popup-badge.badge-disabled { background-color: var(--status-error); }
+.popup-badge.badge-reserved { background-color: var(--status-reserved); }

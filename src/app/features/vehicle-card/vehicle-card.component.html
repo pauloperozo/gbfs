@@ -1,0 +1,15 @@
+<article
+  class="vehicle-card"
+  [class.selected]="selected()"
+  [attr.data-vehicle-id]="vehicle().id"
+  (click)="vehicleSelected.emit(vehicle().id)"
+>
+  <div class="card-header">
+    <span class="bike-id">{{ vehicle().name }}</span>
+    <div class="bike-badges">
+      <span class="badge-tag" [class.badge-ebike]="vehicle().type === vehicleType.Scooter" [class.badge-classic]="vehicle().type === vehicleType.Bike">
+        {{ vehicle().type === vehicleType.Scooter ? dictionary.vehicleType.scooterIcon : dictionary.vehicleType.bikeIcon }}
+      </span>
+    </div>
+  </div>
+</article>

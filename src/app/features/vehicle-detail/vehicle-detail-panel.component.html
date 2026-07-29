@@ -1,0 +1,35 @@
+<section class="detail-panel" [class.detail-panel--empty]="!vehicle()">
+  @if (vehicle(); as selectedVehicle) {
+    <div class="detail-eyebrow">{{ dictionary.labels.vehicleDetail }}</div>
+    
+    <div class="detail-header-row">
+      <h2>{{ providerName }} - {{ selectedVehicle.name }}</h2>
+      <span class="status-badge" 
+            [class.status-available]="!selectedVehicle.isDisabled && !selectedVehicle.isReserved"
+            [class.status-reserved]="selectedVehicle.isReserved"
+            [class.status-disabled]="selectedVehicle.isDisabled">
+        {{ selectedVehicle.isDisabled ? dictionary.status.maintenance : selectedVehicle.isReserved ? dictionary.status.reserved : dictionary.status.available }}
+      </span>
+    </div>
+
+    <div class="detail-grid">
+      <div>
+        <span class="detail-label">{{ dictionary.labels.type }}</span>
+        <strong>{{ selectedVehicle.type === vehicleType.Scooter ? dictionary.vehicleType.scooter : dictionary.vehicleType.bike }}</strong>
+      </div>
+      <div>
+        <span class="detail-label">{{ dictionary.labels.lat }}</span>
+        <strong>{{ selectedVehicle.location.latitude.toFixed(5) }}</strong>
+      </div>
+      <div>
+        <span class="detail-label">{{ dictionary.labels.lng }}</span>
+        <strong>{{ selectedVehicle.location.longitude.toFixed(5) }}</strong>
+      </div>
+    </div>
+  } @else {
+    <div class="detail-placeholder">
+      <h2>{{ dictionary.labels.emptySelectionTitle }}</h2>
+      <p>{{ dictionary.labels.emptySelectionBody }}</p>
+    </div>
+  }
+</section>

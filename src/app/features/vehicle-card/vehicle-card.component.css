@@ -1,0 +1,109 @@
+.vehicle-card {
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 14px;
+  background-color: var(--card-bg);
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+}
+
+.vehicle-card:hover {
+  border-color: var(--card-border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.vehicle-card.selected {
+  border-color: var(--primary-color);
+  background-color: rgba(59, 130, 246, 0.05);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+:host-context(body:not([data-theme='dark'])) .vehicle-card.selected {
+  background-color: rgba(0, 47, 167, 0.03);
+  box-shadow: 0 0 0 2px rgba(0, 47, 167, 0.15);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bike-id {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.bike-badges {
+  display: flex;
+  gap: 6px;
+}
+
+.badge-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.badge-ebike {
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+:host-context([data-theme='dark']) .badge-ebike {
+  background-color: #713f12;
+  color: #fef08a;
+}
+
+.badge-classic {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+:host-context([data-theme='dark']) .badge-classic {
+  background-color: #334155;
+  color: #cbd5e1;
+}
+
+.card-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.battery-display {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+}
+
+.battery-percentage {
+  color: #10b981;
+}
+
+.battery-percentage.low {
+  color: var(--status-error);
+}
+
+.battery-percentage.medium {
+  color: var(--status-reserved);
+}
+
+.battery-percentage.off {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.bike-coords {
+  font-family: monospace;
+}
