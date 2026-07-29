@@ -1,0 +1,16 @@
+<div #listHost class="vehicle-list">
+  @if (vehicles().length === 0) {
+    <div class="empty-state">
+      <h2>{{ dictionary.labels.emptyListTitle }}</h2>
+      <p>{{ dictionary.labels.emptyListBody }}</p>
+    </div>
+  } @else {
+    @for (vehicle of vehicles(); track vehicle.id) {
+      <app-vehicle-card
+        [vehicle]="vehicle"
+        [selected]="vehicle.id === selectedVehicleId()"
+        (vehicleSelected)="vehicleSelected.emit($event)"
+      />
+    }
+  }
+</div>
