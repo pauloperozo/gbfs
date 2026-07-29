@@ -2,6 +2,8 @@
 
 Una aplicación web en tiempo real para visualizar la disponibilidad de vehículos (bicicletas y scooters) del sistema de movilidad compartida de Lyft en la ciudad de Portland, utilizando el estándar **GBFS (General Bikeshare Feed Specification)**.
 
+🌍 **Live Demo:** [https://gbfs.vercel.app/](https://gbfs.vercel.app/)
+
 ## 🚀 Características Principales
 
 *   **Tiempo Real Robusto:** Consumo periódico del feed GBFS con intervalos configurables (1s, 5s, 10s, 30s, etc.) sin fugas de memoria.
