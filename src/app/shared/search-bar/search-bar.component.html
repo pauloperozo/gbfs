@@ -1,0 +1,9 @@
+<label class="search-box">
+  <input
+    #searchInput
+    type="search"
+    [placeholder]="dictionary.labels.searchPlaceholder"
+    [value]="query()"
+    (input)="queryChange.emit(searchInput.value)"
+  />
+</label>

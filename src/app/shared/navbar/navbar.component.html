@@ -1,0 +1,39 @@
+<header class="app-header">
+  <div class="header-left">
+    <h1>{{ dictionary.labels.appTitle }}</h1>
+    <div class="status-meta">
+      <div
+        class="status-indicator"
+        [class.status-connected]="connectionTone() === connectionTones.live"
+        [class.status-loading]="connectionTone() === connectionTones.loading"
+        [class.status-failed]="connectionTone() === connectionTones.fallback"
+      >
+        <span class="status-dot"></span>
+        <span>{{ connectionLabel() }}</span>
+      </div>
+
+      <span class="vehicle-count-header">{{ vehicleCount() }} {{ dictionary.labels.vehiclesCount }}</span>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <div class="refresh-container">
+      <label class="refresh-label">{{ dictionary.labels.refreshRate }}</label>
+      <select
+        #refreshRate
+        class="refresh-select"
+        class="refresh-select"
+        (change)="updateRefreshInterval(refreshRate.value)"
+      >
+        @for (interval of intervals; track interval.value) {
+          <option [value]="interval.value" [selected]="interval.value === refreshIntervalMs()">{{ interval.label }}</option>
+        }
+      </select>
+    </div>
+
+    <button class="theme-toggle-btn" type="button" (click)="themeToggle.emit()" [attr.aria-pressed]="darkTheme()" aria-label="Toggle Theme">
+      <span class="sun-icon">{{ dictionary.theme.lightIcon }}</span>
+      <span class="moon-icon">{{ dictionary.theme.darkIcon }}</span>
+    </button>
+  </div>
+</header>
