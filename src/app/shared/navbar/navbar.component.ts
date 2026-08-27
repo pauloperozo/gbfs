@@ -20,6 +20,7 @@ export class NavbarComponent {
 
   readonly refreshIntervalChange = output<number>();
   readonly themeToggle = output<void>();
+  readonly logout = output<void>();
 
   protected updateRefreshInterval(value: string): void {
     this.refreshIntervalChange.emit(Number(value));

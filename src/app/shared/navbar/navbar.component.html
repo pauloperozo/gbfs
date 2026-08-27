@@ -35,5 +35,9 @@
       <span class="sun-icon">{{ dictionary.theme.lightIcon }}</span>
       <span class="moon-icon">{{ dictionary.theme.darkIcon }}</span>
     </button>
+
+    <button class="logout-btn" type="button" (click)="logout.emit()" aria-label="Cerrar Sesión">
+      <span class="logout-icon">🚪</span>
+    </button>
   </div>
 </header>
