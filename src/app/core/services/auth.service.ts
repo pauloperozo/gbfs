@@ -37,32 +37,22 @@ export class AuthService {
     }
   }
 
-  /**
-   * Mock login with email and password
-   */
-  loginWithEmail(email: string, password: string): Observable<User> {
+  loginWithEmail(username: string, password: string): Observable<User> {
     this.isLoading.set(true);
     this.authError.set(null);
 
-    // Simple mock validation rules
-    if (!email.includes('@')) {
+    // Validate against fixed mock admin credentials
+    if (username !== 'admin' || password !== 'admin') {
       this.isLoading.set(false);
-      const errorMsg = 'El correo electrónico no es válido';
-      this.authError.set(errorMsg);
-      return throwError(() => new Error(errorMsg));
-    }
-
-    if (password.length < 6) {
-      this.isLoading.set(false);
-      const errorMsg = 'La contraseña debe tener al menos 6 caracteres';
+      const errorMsg = 'Usuario o contraseña incorrectos';
       this.authError.set(errorMsg);
       return throwError(() => new Error(errorMsg));
     }
 
     // Simulate backend call delay
     const mockUser: User = {
-      email,
-      name: email.split('@')[0],
+      email: 'admin@gbfs.com',
+      name: 'Admin',
     };
 
     return of(mockUser).pipe(
