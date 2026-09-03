@@ -1,7 +1,8 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { delay, tap, map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { IS_BROWSER } from '../constants/platform.constants';
 
 export interface User {
@@ -14,6 +15,7 @@ export interface User {
 })
 export class AuthService {
   private readonly router = inject(Router);
+  private readonly http = inject(HttpClient);
 
   // Reactive signals for state management
   readonly isAuthenticated = signal<boolean>(false);
@@ -37,50 +39,37 @@ export class AuthService {
     }
   }
 
-  /**
-   * Mock login with email and password
-   */
-  loginWithEmail(email: string, password: string): Observable<User> {
+  loginWithEmail(username: string, password: string): Observable<User> {
     this.isLoading.set(true);
     this.authError.set(null);
 
-    // Simple mock validation rules
-    if (!email.includes('@')) {
-      this.isLoading.set(false);
-      const errorMsg = 'El correo electrónico no es válido';
-      this.authError.set(errorMsg);
-      return throwError(() => new Error(errorMsg));
-    }
+    const loginData = { email: username, password };
+    const loginUrl = 'https://gbs-backend-delta.vercel.app/auth/login';
 
-    if (password.length < 6) {
-      this.isLoading.set(false);
-      const errorMsg = 'La contraseña debe tener al menos 6 caracteres';
-      this.authError.set(errorMsg);
-      return throwError(() => new Error(errorMsg));
-    }
-
-    // Simulate backend call delay
-    const mockUser: User = {
-      email,
-      name: email.split('@')[0],
-    };
-
-    return of(mockUser).pipe(
-      delay(1200), // simulate network delay
+    return this.http.post<{ access_token: string }>(loginUrl, loginData).pipe(
       tap({
-        next: (user) => {
+        next: (response) => {
           this.isAuthenticated.set(true);
+          
+          const user: User = {
+            email: username,
+            name: username.split('@')[0],
+          };
+          
           this.currentUser.set(user);
           this.isLoading.set(false);
+
           if (IS_BROWSER) {
+            localStorage.setItem('auth_token', response.access_token);
             localStorage.setItem('auth_user', JSON.stringify(user));
           }
         },
-        error: () => {
+        error: (err) => {
           this.isLoading.set(false);
-          this.authError.set('Error de autenticación');
+          this.authError.set('Error de autenticación: Credenciales inválidas');
         }
-      })
+      }),
+      map(() => ({ email: username, name: username.split('@')[0] }))
     );
   }
 
