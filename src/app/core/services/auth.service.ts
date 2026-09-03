@@ -1,7 +1,8 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { delay, tap, map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { IS_BROWSER } from '../constants/platform.constants';
 
 export interface User {
@@ -14,6 +15,7 @@ export interface User {
 })
 export class AuthService {
   private readonly router = inject(Router);
+  private readonly http = inject(HttpClient);
 
   // Reactive signals for state management
   readonly isAuthenticated = signal<boolean>(false);
@@ -41,36 +43,33 @@ export class AuthService {
     this.isLoading.set(true);
     this.authError.set(null);
 
-    // Validate against fixed mock admin credentials
-    if (username !== 'admin' || password !== 'admin') {
-      this.isLoading.set(false);
-      const errorMsg = 'Usuario o contraseña incorrectos';
-      this.authError.set(errorMsg);
-      return throwError(() => new Error(errorMsg));
-    }
+    const loginData = { email: username, password };
+    const loginUrl = 'https://gbs-backend-delta.vercel.app/auth/login';
 
-    // Simulate backend call delay
-    const mockUser: User = {
-      email: 'admin@gbfs.com',
-      name: 'Admin',
-    };
-
-    return of(mockUser).pipe(
-      delay(1200), // simulate network delay
+    return this.http.post<{ access_token: string }>(loginUrl, loginData).pipe(
       tap({
-        next: (user) => {
+        next: (response) => {
           this.isAuthenticated.set(true);
+          
+          const user: User = {
+            email: username,
+            name: username.split('@')[0],
+          };
+          
           this.currentUser.set(user);
           this.isLoading.set(false);
+
           if (IS_BROWSER) {
+            localStorage.setItem('auth_token', response.access_token);
             localStorage.setItem('auth_user', JSON.stringify(user));
           }
         },
-        error: () => {
+        error: (err) => {
           this.isLoading.set(false);
-          this.authError.set('Error de autenticación');
+          this.authError.set('Error de autenticación: Credenciales inválidas');
         }
-      })
+      }),
+      map(() => ({ email: username, name: username.split('@')[0] }))
     );
   }
 
