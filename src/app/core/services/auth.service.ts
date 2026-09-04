@@ -46,14 +46,15 @@ export class AuthService {
     const loginData = { email: username, password };
     const loginUrl = 'https://gbs-backend-delta.vercel.app/auth/login';
 
-    return this.http.post<{ access_token: string }>(loginUrl, loginData).pipe(
+    return this.http.post<{ id?: string, email?: string, access_token: string }>(loginUrl, loginData).pipe(
       tap({
         next: (response) => {
           this.isAuthenticated.set(true);
           
+          const userEmail = response.email || username;
           const user: User = {
-            email: username,
-            name: username.split('@')[0],
+            email: userEmail,
+            name: userEmail.split('@')[0],
           };
           
           this.currentUser.set(user);
@@ -69,37 +70,52 @@ export class AuthService {
           this.authError.set('Error de autenticación: Credenciales inválidas');
         }
       }),
-      map(() => ({ email: username, name: username.split('@')[0] }))
+      map((response) => {
+        const userEmail = response.email || username;
+        return {
+          email: userEmail,
+          name: userEmail.split('@')[0],
+        };
+      })
     );
   }
 
-  /**
-   * Mock login with Google
-   */
-  loginWithGoogle(): Observable<User> {
+  loginWithGoogle(idToken: string = 'token_de_prueba'): Observable<User> {
     this.isLoading.set(true);
     this.authError.set(null);
 
-    const mockUser: User = {
-      email: 'usuario.google@gmail.com',
-      name: 'Google User',
-    };
+    const loginUrl = 'https://gbs-backend-delta.vercel.app/auth/google';
 
-    return of(mockUser).pipe(
-      delay(1500), // simulate google redirect / login popup delay
+    return this.http.post<{ id?: string, email?: string, access_token: string }>(loginUrl, { idToken }).pipe(
       tap({
-        next: (user) => {
+        next: (response) => {
           this.isAuthenticated.set(true);
+          
+          const userEmail = response.email || 'usuario@google.com';
+          const user: User = {
+            email: userEmail,
+            name: userEmail.split('@')[0] || 'Usuario Google',
+          };
+          
           this.currentUser.set(user);
           this.isLoading.set(false);
+
           if (IS_BROWSER) {
+            localStorage.setItem('auth_token', response.access_token);
             localStorage.setItem('auth_user', JSON.stringify(user));
           }
         },
         error: () => {
           this.isLoading.set(false);
-          this.authError.set('Error al conectar con Google');
+          this.authError.set('Error al verificar el token de Google');
         }
+      }),
+      map((response) => {
+        const userEmail = response.email || 'usuario@google.com';
+        return {
+          email: userEmail,
+          name: userEmail.split('@')[0] || 'Usuario Google',
+        };
       })
     );
   }
