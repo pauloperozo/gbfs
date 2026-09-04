@@ -80,7 +80,7 @@ export class AuthService {
     );
   }
 
-  loginWithGoogle(idToken: string = 'token_de_prueba'): Observable<User> {
+  loginWithGoogle(idToken: string): Observable<User> {
     this.isLoading.set(true);
     this.authError.set(null);
 
