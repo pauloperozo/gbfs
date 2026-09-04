@@ -9,6 +9,7 @@ export interface ApiConfig {
     readonly defaultZoom: number;
     readonly minZoom: number;
     readonly maxZoom: number;
+    readonly googleClientId: string;
 }
 
 export const DEFAULT_API_CONFIG: ApiConfig = {
@@ -29,6 +30,7 @@ export const DEFAULT_API_CONFIG: ApiConfig = {
     defaultZoom: 13,
     minZoom: 10,
     maxZoom: 18,
+    googleClientId: '383969365968-vjvbjuknr42iv6bnus4kp2g0v091vljf.apps.googleusercontent.com',
 };
 
 export const API_CONFIG = new InjectionToken<ApiConfig>('API_CONFIG');
