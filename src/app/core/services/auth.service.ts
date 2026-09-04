@@ -46,14 +46,15 @@ export class AuthService {
     const loginData = { email: username, password };
     const loginUrl = 'https://gbs-backend-delta.vercel.app/auth/login';
 
-    return this.http.post<{ access_token: string }>(loginUrl, loginData).pipe(
+    return this.http.post<{ id?: string, email?: string, access_token: string }>(loginUrl, loginData).pipe(
       tap({
         next: (response) => {
           this.isAuthenticated.set(true);
           
+          const userEmail = response.email || username;
           const user: User = {
-            email: username,
-            name: username.split('@')[0],
+            email: userEmail,
+            name: userEmail.split('@')[0],
           };
           
           this.currentUser.set(user);
@@ -69,7 +70,13 @@ export class AuthService {
           this.authError.set('Error de autenticación: Credenciales inválidas');
         }
       }),
-      map(() => ({ email: username, name: username.split('@')[0] }))
+      map((response) => {
+        const userEmail = response.email || username;
+        return {
+          email: userEmail,
+          name: userEmail.split('@')[0],
+        };
+      })
     );
   }
 
@@ -79,14 +86,15 @@ export class AuthService {
 
     const loginUrl = 'https://gbs-backend-delta.vercel.app/auth/google';
 
-    return this.http.post<{ access_token: string }>(loginUrl, { idToken }).pipe(
+    return this.http.post<{ id?: string, email?: string, access_token: string }>(loginUrl, { idToken }).pipe(
       tap({
         next: (response) => {
           this.isAuthenticated.set(true);
           
+          const userEmail = response.email || 'usuario@google.com';
           const user: User = {
-            email: 'google.user@gmail.com',
-            name: 'Usuario Google',
+            email: userEmail,
+            name: userEmail.split('@')[0] || 'Usuario Google',
           };
           
           this.currentUser.set(user);
@@ -102,7 +110,13 @@ export class AuthService {
           this.authError.set('Error al verificar el token de Google');
         }
       }),
-      map(() => ({ email: 'google.user@gmail.com', name: 'Usuario Google' }))
+      map((response) => {
+        const userEmail = response.email || 'usuario@google.com';
+        return {
+          email: userEmail,
+          name: userEmail.split('@')[0] || 'Usuario Google',
+        };
+      })
     );
   }
 
