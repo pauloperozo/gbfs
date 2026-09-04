@@ -73,34 +73,36 @@ export class AuthService {
     );
   }
 
-  /**
-   * Mock login with Google
-   */
-  loginWithGoogle(): Observable<User> {
+  loginWithGoogle(idToken: string = 'token_de_prueba'): Observable<User> {
     this.isLoading.set(true);
     this.authError.set(null);
 
-    const mockUser: User = {
-      email: 'usuario.google@gmail.com',
-      name: 'Google User',
-    };
+    const loginUrl = 'https://gbs-backend-delta.vercel.app/auth/google';
 
-    return of(mockUser).pipe(
-      delay(1500), // simulate google redirect / login popup delay
+    return this.http.post<{ access_token: string }>(loginUrl, { idToken }).pipe(
       tap({
-        next: (user) => {
+        next: (response) => {
           this.isAuthenticated.set(true);
+          
+          const user: User = {
+            email: 'google.user@gmail.com',
+            name: 'Usuario Google',
+          };
+          
           this.currentUser.set(user);
           this.isLoading.set(false);
+
           if (IS_BROWSER) {
+            localStorage.setItem('auth_token', response.access_token);
             localStorage.setItem('auth_user', JSON.stringify(user));
           }
         },
         error: () => {
           this.isLoading.set(false);
-          this.authError.set('Error al conectar con Google');
+          this.authError.set('Error al verificar el token de Google');
         }
-      })
+      }),
+      map(() => ({ email: 'google.user@gmail.com', name: 'Usuario Google' }))
     );
   }
 
