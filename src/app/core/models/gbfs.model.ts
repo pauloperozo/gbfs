@@ -1,18 +1,14 @@
-export interface GbfsBikeDto {
-    readonly bike_id: string;
-    readonly type: string;
-    readonly name: string;
-    readonly lat: number;
-    readonly lon: number;
-    readonly is_reserved: number;
-    readonly is_disabled: number;
-}
+import { Vehicle } from './vehicle.model';
 
 export interface GbfsResponse {
+    readonly success: boolean;
+    readonly message: string;
     readonly data: {
-        readonly bikes: readonly GbfsBikeDto[];
+        readonly vehicles: readonly Vehicle[];
+        readonly total: number;
+        readonly provider: string;
+        readonly lastUpdated: string;
+        readonly ttl: number;
     };
-    readonly last_updated: number;
-    readonly ttl: number;
-    readonly version: string;
+    readonly timestamp: string;
 }

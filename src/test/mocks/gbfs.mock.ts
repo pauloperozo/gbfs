@@ -1,20 +1,27 @@
 import type { GbfsResponse } from '../../app/core/models/gbfs.model';
+import { VehicleType } from '../../app/core/models/vehicle.model';
 
 export const mockGbfsResponse: GbfsResponse = {
-  last_updated: 1700000000,
-  ttl: 60,
-  version: '1.1',
+  success: true,
+  message: "Vehículos obtenidos exitosamente",
   data: {
-    bikes: [
+    vehicles: [
       {
-        bike_id: '1',
+        id: '1',
         name: 'Bike 1',
-        type: 'bike',
-        lat: 10,
-        lon: 20,
-        is_reserved: 0,
-        is_disabled: 0,
+        type: VehicleType.Bike,
+        location: {
+          latitude: 10,
+          longitude: 20
+        },
+        isReserved: false,
+        isDisabled: false
       }
-    ]
-  }
+    ],
+    total: 1,
+    provider: "Lyft",
+    lastUpdated: "2026-09-08T08:16:33.000Z",
+    ttl: 60
+  },
+  timestamp: "2026-09-08T08:16:35.123Z"
 };
