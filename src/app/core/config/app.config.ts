@@ -13,8 +13,8 @@ export interface ApiConfig {
 }
 
 export const DEFAULT_API_CONFIG: ApiConfig = {
-    baseUrl: 'https://gbfs.lyft.com/gbfs/1.1/pdx/en',
-    freeBikeStatusPath: 'free_bike_status.json',
+    baseUrl: 'https://gbs-backend-delta.vercel.app',
+    freeBikeStatusPath: 'vehicles',
     pollingIntervals: [
         { value: 1000, label: '1s' },
         { value: 5000, label: '5s' },

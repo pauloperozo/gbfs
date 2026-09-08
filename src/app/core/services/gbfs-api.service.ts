@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, inject } from '@angular/core';
 import { catchError, map, of, type Observable } from 'rxjs';
 import { API_CONFIG, type ApiConfig } from '../config/app.config';
-import { parseGbfsBikeToVehicle } from '../utils/vehicle.parser';
 import { GBFS_ERRORS } from '../constants/errors.constant';
 import type { GbfsResponse } from '../models/gbfs.model';
 import type { Vehicle, VehicleState } from '../models/vehicle.model';
@@ -20,16 +19,16 @@ export class GbfsApiService {
 
     return this.httpClient.get<GbfsResponse>(endpoint).pipe(
       map((response) => {
-        const bikes = response.data.bikes;
+        const vehicles = response.data.vehicles;
 
-        if (bikes.length === 0) {
+        if (vehicles.length === 0) {
           throw new Error(GBFS_ERRORS.API_EMPTY_VEHICLE_LIST);
         }
 
         return {
-          vehicles: parseGbfsBikeToVehicle(bikes),
+          vehicles: vehicles,
           error: null,
-          receivedAt: new Date(response.last_updated),
+          receivedAt: new Date(response.data.lastUpdated),
         }
 
       }),
